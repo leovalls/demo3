@@ -5,16 +5,49 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <Button 
-        android:id="@+id/btnFoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:gravity="center"
-        android:text="@string/btn_foto"/>
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" 
+        android:paddingBottom="20dp">
+	    
+	    <Button 
+	        android:id="@+id/btnUpdate"
+	        android:layout_weight="1"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:text="@string/btn_update"/>
+	    
+	    <Button 
+	        android:id="@+id/btnFoto"
+	        android:layout_weight="1"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:text="@string/btn_foto"/>
+	    
+	    <Button 
+	        android:id="@+id/btnParse"
+	        android:layout_weight="1"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:text="@string/btn_parse"/>
+	    
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
     
     <GridView
         android:id="@+id/grid"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:numColumns="2" >

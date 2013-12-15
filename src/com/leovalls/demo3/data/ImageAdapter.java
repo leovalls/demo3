@@ -1,5 +1,7 @@
 package com.leovalls.demo3.data;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -8,38 +10,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.leovalls.demo3.R;
+import com.leovalls.demo3.activities.MainActivity;
+import com.leovalls.demo3.utility.BitmapLRUCache;
 
 public class ImageAdapter extends BaseAdapter {
-    int[] arrayFlags = new int[]{R.drawable.brasil, 
-                     R.drawable.mexico,
-                     R.drawable.colombia,
-                     R.drawable.argentina,
-                     R.drawable.peru,
-                     R.drawable.venezuela,
-                     R.drawable.chile,
-                     R.drawable.ecuador,
-                     R.drawable.guatemala,
-                     R.drawable.cuba};
-    
-    String[] arrayCountries = new String[]{"Brasil", "México", "Colombia", "Argentina",
-                                           "Perú", "Venezuela", "Chile", "Ecuador", 
-                                           "Guatemala", "Cuba"};        
-    
-    private Resources resources;
+
+	private ImageLoader imageLoader;
+	private ArrayList<Image> dataArray;
     private LayoutInflater inflater;
     
-	public ImageAdapter(Context context) {
-        this.resources = context.getResources();
+	public ImageAdapter(Context context, ArrayList<Image> dataArray) {
+        this.dataArray = dataArray;
 	    this.inflater = LayoutInflater.from(context);
+	    this.imageLoader = new ImageLoader(MainActivity.resquestQueue, new BitmapLRUCache());
 	}
         
     @Override
     public int getCount() {
-            return arrayFlags.length;
+            return dataArray.size();
     }
 
     @Override
@@ -55,11 +48,12 @@ public class ImageAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
+            Image current = dataArray.get(position);
     if (convertView == null) {
             convertView = inflater.inflate(R.layout.grid_image, null);
 
             holder = new ViewHolder();
-            holder.imgFlag = (ImageView) convertView.findViewById(R.id.imageFlag);
+            holder.imgFlag = (NetworkImageView) convertView.findViewById(R.id.imageFlag);
             holder.txtName = (TextView) convertView.findViewById(R.id.textName);
             
             convertView.setTag(holder);                
@@ -67,10 +61,9 @@ public class ImageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
     
-    	holder.imgFlag.setImageBitmap(
-                decodeSampledBitmapFromResource(resources, arrayFlags[position], 400, 200));
+    	holder.imgFlag.setImageUrl(current.getImageUrl(), imageLoader);
 
-        holder.txtName.setText(arrayCountries[position]);
+        holder.txtName.setText(current.getUserName());
     
         return convertView;
     }
@@ -105,7 +98,7 @@ public class ImageAdapter extends BaseAdapter {
 	}        
     
     static class ViewHolder {
-            public ImageView imgFlag;
+            public NetworkImageView imgFlag;
             public TextView txtName;
     }
 
